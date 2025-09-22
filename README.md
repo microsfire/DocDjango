@@ -100,3 +100,66 @@ class RegisterForm(forms.Form):
         if cleaned.get("password") != cleaned.get("confirm_password"):
             raise ValidationError("As senhas não coincidem.")
         return cleaned
+
+
+# Resumo da Documentação de Formulários no Django 5.2
+
+## Principais conceitos
+
+### 1. Formulários HTML básicos
+
+-   Elementos como `<input>`, `<select>`, `<textarea>` etc. são usados
+    para capturar dados do usuário.\
+-   Dois atributos essenciais no `<form>`:
+    -   `action`: para qual URL os dados serão enviados.\
+    -   `method`: normalmente `GET` ou `POST`.
+
+### 2. Uso de GET vs POST
+
+-   **POST**: para requisições que mudam o estado do sistema, envolvem
+    dados sensíveis ou muitas informações.\
+-   **GET**: para buscas ou situações onde não há alteração do estado.
+    URLs são reproduzíveis e podem ser salvas em favoritos, mas são
+    menos seguras para dados sensíveis.
+
+### 3. Classe `Form` do Django
+
+-   Define os campos, tipos, rótulos e validações do formulário.\
+-   `ModelForm`: facilita criar formulários baseados em modelos do banco
+    de dados.
+
+### 4. Instanciação, renderização e processamento
+
+-   Formulários "vazios" (unbound) e formulários com dados (bound) após
+    submissão.\
+-   Fluxo em uma view:
+    -   Exibir formulário vazio para GET.\
+    -   Popular com `request.POST` para POST e chamar `is_valid()`.\
+    -   Se válido: usar `cleaned_data` para processar.\
+    -   Se inválido: retornar formulário ao template com erros.
+
+### 5. Templates para formulários
+
+-   Renderizar com `{{ form }}` ou campos individualmente.\
+-   Em requisições POST: necessário `{% csrf_token %}` no template para
+    proteção contra CSRF.
+
+### 6. Widgets, validação e tipo de dado
+
+-   Cada campo tem um widget padrão (ex: `CharField` → `TextInput`).\
+-   É possível customizar widgets.\
+-   Campos como `EmailField`, `URLField`, `IntegerField` validam e
+    convertem dados automaticamente para tipos Python.
+
+### 7. Erros de formulário
+
+-   **Erros de campo**: exibidos próximos ao campo correspondente.\
+-   **Erros não relacionados a campo (non-field errors)**: exibidos
+    separadamente.
+
+### 8. Looping sobre campos no template
+
+-   Possível iterar sobre os campos (`for field in form`) para
+    renderização personalizada.\
+-   Separar campos visíveis de ocultos: `form.visible_fields()` e
+    `form.hidden_fields()`.
